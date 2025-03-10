@@ -1,6 +1,5 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.entity;
 
-import com.kernel360.ronaldo.TemuOverflow.article.entity.Article;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import jakarta.persistence.*;
