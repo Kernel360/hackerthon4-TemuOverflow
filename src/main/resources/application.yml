@@ -15,6 +15,7 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 logging:
   level:
@@ -23,6 +24,6 @@ logging:
     org.hibernate.orm.jdbc.bind: trace
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
