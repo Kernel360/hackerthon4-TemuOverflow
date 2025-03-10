@@ -1,4 +1,4 @@
-package com.kernel360.ronaldo.TemuOverflow.chat;
+package com.kernel360.ronaldo.TemuOverflow.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;

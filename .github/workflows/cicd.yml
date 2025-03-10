@@ -86,4 +86,16 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
             docker stop spring-app || true
             docker rm spring-app || true
-            docker run -d --name spring-app -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
+            docker run -d --name spring-app -p 80:8080 \
+            -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
+            -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
+            -e MYSQL_DB=${{ secrets.MYSQL_DB }} \
+            -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
+            -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+            -e AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} \
+            -e AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} \
+            -e AWS_REGION=${{ secrets.AWS_REGION }} \
+            -e AWS_S3_BUCKET=${{ secrets.AWS_S3_BUCKET }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e CLAUDE_KEY=${{ secrets.CLAUDE_KEY }} \
+            ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
