@@ -2,7 +2,7 @@ package com.kernel360.ronaldo.TemuOverflow.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.w3c.dom.Text;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -24,4 +24,11 @@ public class User {
 
     @Lob
     private String profileImageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public void passwordEncode(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+    }
 }
