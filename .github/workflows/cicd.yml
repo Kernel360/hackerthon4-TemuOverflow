@@ -74,7 +74,6 @@ jobs:
     name: Deploy to Server
     runs-on: ubuntu-latest
     needs: docker
-    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Deploy via SSH
@@ -87,4 +86,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
             docker stop spring-app || true
             docker rm spring-app || true
-            docker run -d --name spring-app -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
+            docker run -d --name spring-app -p 80:8080 ${{ secrets.DOCKER_USERNAME }}/spring-app:latest
