@@ -27,6 +27,7 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+<<<<<<< HEAD
 
 cloud:
   aws:
@@ -39,3 +40,4 @@ cloud:
       auto: false
     s3:
       bucket: ${AWS_S3_BUCKET}
+
