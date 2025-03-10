@@ -1,19 +1,4 @@
----
-name: issue
-about: 이슈 발생 시 사용
-title: 이슈
-labels: ''
-assignees: ''
 
----
-
----
-name: "일반 이슈"
-about: "일반적인 이슈나 문의 사항을 작성해주세요."
-title: "[ISSUE]"
-labels: ""
-assignees: ""
----
 
 ## 이슈 설명
 이슈에 대한 전반적인 설명을 작성해주세요.

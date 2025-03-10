@@ -1,19 +1,5 @@
 ---
-name: docs
-about: 문서 작업 시 사용하는 템플릿
-title: 문서
-labels: documentation
-assignees: ''
 
----
-
----
-name: "📚 문서 개선 제안"
-about: "문서 개선 사항이나 업데이트를 제안해주세요."
-title: "[DOCS]"
-labels: documentation
-assignees: ""
----
 
 ## 문서 개선 내용
 개선이 필요한 문서의 내용이나 수정사항을 구체적으로 작성해주세요.
