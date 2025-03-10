@@ -2,7 +2,6 @@ package com.kernel360.ronaldo.TemuOverflow.post.service;
 
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
-import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -58,12 +57,13 @@ public class PostService {
         int randomIndex = (int) (Math.random() * count);  // 0부터 count-1까지 랜덤한 숫자
         return postRepository.findPostByIndex(randomIndex);
     }
-}
+
 
     // 게시글 검색
     public List<Post> searchPosts(String keyword) {
         return postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
     }
-
 }
+
+
 
