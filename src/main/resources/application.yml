@@ -46,3 +46,10 @@ claude:
     key: ${CLAUDE_KEY}
     model: claude-3-opus-20240229
     max-tokens: 1000
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
+  access:
+    expiration: 3600000
+    header: Authorization

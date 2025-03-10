@@ -2,14 +2,13 @@ package com.kernel360.ronaldo.TemuOverflow.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-//import com.kernel360.ronaldo.TemuOverflow.user.jwt.JwtAuthenticationFilter;
-//import com.kernel360.ronaldo.TemuOverflow.user.jwt.JwtTokenProvider;
-//import com.kernel360.ronaldo.TemuOverflow.user.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
-//import com.kernel360.ronaldo.TemuOverflow.user.login.handler.LoginFailureHandler;
-//import com.kernel360.ronaldo.TemuOverflow.user.login.service.LoginService;
-//import com.kernel360.ronaldo.TemuOverflow.user.login.handler.LoginSuccessHandler;
-//import com.kernel360.ronaldo.TemuOverflow.user.jwt.JwtUtils;
-//import devkor.ontime_back.repository.UserRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.jwt.filter.JwtAuthenticationFilter;
+import com.kernel360.ronaldo.TemuOverflow.user.jwt.util.JwtTokenProvider;
+import com.kernel360.ronaldo.TemuOverflow.user.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.kernel360.ronaldo.TemuOverflow.user.login.handler.LoginFailureHandler;
+import com.kernel360.ronaldo.TemuOverflow.user.login.service.LoginService;
+import com.kernel360.ronaldo.TemuOverflow.user.login.handler.LoginSuccessHandler;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,12 +33,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    private final LoginService loginService;
-//    private final JwtTokenProvider jwtTokenProvider;
-//    private final UserRepository userRepository;
+    private final LoginService loginService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
-//    private final AppleLoginService appleLoginService;
-//    private final GoogleLoginService googleLoginService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -54,13 +52,13 @@ public class SecurityConfig {
                         .frameOptions(frameOptions -> frameOptions.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers( "/swagger-ui/**").permitAll()
+                        .requestMatchers("/register", "/login", "login/success").permitAll()
+                        .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
-                );
-//                .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
-//                .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
+                )
+                .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -75,35 +73,35 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-//        provider.setUserDetailsService(loginService);
+        provider.setUserDetailsService(loginService);
         return new ProviderManager(provider);
     }
 
-//    @Bean
-//    public LoginSuccessHandler loginSuccessHandler() {
-//        return new LoginSuccessHandler(jwtTokenProvider, userRepository);
-//    }
-//
-//    @Bean
-//    public LoginFailureHandler loginFailureHandler() {
-//        return new LoginFailureHandler();
-//    }
-//
-//    @Bean
-//    public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
-//        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
-//                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
-//        customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
-//        customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
-//        customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
-//        return customJsonUsernamePasswordLoginFilter;
-//    }
-//
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationProcessingFilter() {
-//        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userRepository);
-//        return jwtAuthenticationFilter;
-//    }
+    @Bean
+    public LoginSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler(jwtTokenProvider, userRepository);
+    }
+
+    @Bean
+    public LoginFailureHandler loginFailureHandler() {
+        return new LoginFailureHandler();
+    }
+
+    @Bean
+    public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
+        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
+                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+        customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
+        customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
+        customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        return customJsonUsernamePasswordLoginFilter;
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationProcessingFilter() {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider, userRepository);
+        return jwtAuthenticationFilter;
+    }
 
 
     @Bean
