@@ -1,3 +1,11 @@
+---
+name: bug
+about: 버그 발생 시 사용
+title: 버그
+labels: bug
+assignees: ''
+
+---
 
 ---
 name: "🐞 버그 리포트"

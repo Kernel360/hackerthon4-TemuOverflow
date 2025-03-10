@@ -1,5 +1,13 @@
 
 
+---
+name: "✨ 기능 추가 요청"
+about: "새로운 기능이나 개선 요청을 제안해주세요."
+title: "[FEATURE]"
+labels: enhancement
+assignees: ""
+---
+
 ## 기능 요청 배경
 해당 기능이 필요한 이유와 현재 겪고 있는 문제를 설명해주세요.
 
