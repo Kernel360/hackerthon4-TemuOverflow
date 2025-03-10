@@ -3,6 +3,8 @@ package com.kernel360.ronaldo.TemuOverflow.post.controller;
 import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
+import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
+    private final UserAuthService userAuthService;
 
     // 게시글 생성 (POST)
     @PostMapping
@@ -53,5 +56,11 @@ public class PostController {
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity<PostDto> getRandomPosts(HttpServletRequest request) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+        return ResponseEntity.ok(PostDto.fromEntity(postService.getRandomPost(userId)));
     }
 }

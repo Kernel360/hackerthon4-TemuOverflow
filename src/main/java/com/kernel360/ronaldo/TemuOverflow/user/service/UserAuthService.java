@@ -50,7 +50,7 @@ public class UserAuthService {
     }
 
     public Long getUserIdFromToken(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
+        String accessToken = request.getHeader("Authorization").substring(7);
         return jwtTokenProvider.extractUserId(accessToken).orElseThrow(() -> new RuntimeException("User Id not found in token"));
     }
 }

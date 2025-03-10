@@ -49,6 +49,12 @@ public class PostService {
 
     // 랜덤으로 게시글 조회(랜덤 에러)
     public Post getRandomPost(Long userId) {
+        long count = postRepository.count();
+        if (count == 0) {
+            throw new IllegalStateException("저장된 Article이 전무합니다.");
+        }
 
+        int randomIndex = (int) (Math.random() * count);  // 0부터 count-1까지 랜덤한 숫자
+        return postRepository.findPostByIndex(randomIndex);
     }
 }
