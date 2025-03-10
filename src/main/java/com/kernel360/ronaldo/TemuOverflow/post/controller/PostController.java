@@ -62,5 +62,14 @@ public class PostController {
     public ResponseEntity<PostDto> getRandomPosts(HttpServletRequest request) {
         Long userId = userAuthService.getUserIdFromToken(request);
         return ResponseEntity.ok(PostDto.fromEntity(postService.getRandomPost(userId)));
+
+    // 게시글 검색 (GET)
+    @GetMapping("/search")
+    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam String keyword) {
+        List<PostDto> posts = postService.searchPosts(keyword).stream()
+                .map(PostDto::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(posts);
+
     }
 }
