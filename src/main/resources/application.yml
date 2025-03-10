@@ -27,7 +27,6 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
-<<<<<<< HEAD
 
 cloud:
   aws:
@@ -41,3 +40,9 @@ cloud:
     s3:
       bucket: ${AWS_S3_BUCKET}
 
+claude:
+  api:
+    url : https://api.anthropic.com/v1/messages
+    key: ${CLAUDE_KEY}
+    model: claude-3-opus-20240229
+    max-tokens: 1000
