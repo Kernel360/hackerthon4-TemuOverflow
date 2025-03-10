@@ -2,6 +2,8 @@ package com.kernel360.ronaldo.TemuOverflow.post.service;
 
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final UserAuthService userAuthService;
 
     // 게시글 생성
     public Post createPost(Post post) {
@@ -42,5 +45,10 @@ public class PostService {
     // 게시글 삭제
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    // 랜덤으로 게시글 조회(랜덤 에러)
+    public Post getRandomPost(Long userId) {
+
     }
 }
