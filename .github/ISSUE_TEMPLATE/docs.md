@@ -1,4 +1,11 @@
+---
+name: docs
+about: 문서 작업 시 사용하는 템플릿
+title: 문서
+labels: documentation
+assignees: ''
 
+---
 
 ---
 name: "📚 문서 개선 제안"
