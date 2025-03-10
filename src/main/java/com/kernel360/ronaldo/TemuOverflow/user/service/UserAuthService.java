@@ -1,5 +1,6 @@
 package com.kernel360.ronaldo.TemuOverflow.user.service;
 
+import com.kernel360.ronaldo.TemuOverflow.s3.S3Service;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpRequest;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserAuthService {
 
     private final UserRepository userRepository;
+    private final S3Service s3Service;
 //    private final PasswordEncoder passwordEncoder; // 차후 스프링시큐리티에서 빈으로 등록한 후 사용해야함.
 
     @Transactional
@@ -27,15 +29,17 @@ public class UserAuthService {
             throw new IllegalArgumentException("Nickname already in use");
         }
 
-        /*
-        여기에 s3에 이미지 저장하고, 이미지 url 반환받는 코드 작성한 다음
-        User 객체 생성할 때, 이미지 url 저장하는 코드 뒤에 추가해야 함.
-         */
+        String profileImageUrl = null;
+        if (userSignupRequest.getProfileImage() != null && !userSignupRequest.getProfileImage().isEmpty()) {
+            profileImageUrl = s3Service.uploadFile(userSignupRequest.getProfileImage());
+        }
+
 
         User user = User.builder()
                 .email(userSignupRequest.getEmail())
                 .password(userSignupRequest.getPassword()) // 차후 스프링시큐리티에서 passwordEncoder빈으로 등록한 뒤 비밀번호 인코딩해서 저장해야함
                 .nickname(userSignupRequest.getNickname())
+                .profileImageUrl(profileImageUrl)
                 .build();
         return userRepository.save(user);
     }
