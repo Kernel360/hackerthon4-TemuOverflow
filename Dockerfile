@@ -3,7 +3,7 @@ FROM gradle:8.5-jdk17 AS builder
 WORKDIR /app
 
 # Gradle 캐싱을 위해 의존성 관련 파일 먼저 복사
-COPY build.gradle settings.gradle gradle.properties ./
+COPY build.gradle settings.gradle ./
 COPY gradle gradle
 RUN gradle build || return 0  # Gradle 캐시 적용
 
