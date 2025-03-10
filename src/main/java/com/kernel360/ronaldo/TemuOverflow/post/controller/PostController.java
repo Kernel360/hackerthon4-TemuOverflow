@@ -62,6 +62,7 @@ public class PostController {
     public ResponseEntity<PostDto> getRandomPosts(HttpServletRequest request) {
         Long userId = userAuthService.getUserIdFromToken(request);
         return ResponseEntity.ok(PostDto.fromEntity(postService.getRandomPost(userId)));
+    }
 
     // 게시글 검색 (GET)
     @GetMapping("/search")
