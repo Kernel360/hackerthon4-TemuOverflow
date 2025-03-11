@@ -16,8 +16,6 @@ public class LikeReply {
     @Column
     private Long id;
 
-    private Long replyId;
-
     private Long userId;
 
     @ManyToOne

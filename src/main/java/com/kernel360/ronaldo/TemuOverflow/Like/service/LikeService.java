@@ -32,7 +32,7 @@ public class LikeService {
         }
 
         // 사용자가 이미 해당 게시글에 좋아요를 눌렀는지 확인
-        Optional<LikeArticle> existingLike = likeArticleRepository.findByArticleIdAndUserId(articleId, userId);
+        Optional<LikeArticle> existingLike = likeArticleRepository.findByPostIdAndUserId(articleId, userId);
 
         if (existingLike.isPresent()) {
             // 이미 좋아요를 눌렀다면 좋아요 취소
@@ -42,7 +42,7 @@ public class LikeService {
 
         // 좋아요 저장
         LikeArticle likeArticle = LikeArticle.builder()
-                .articleId(articleId)
+                .post(postRepository.findById(articleId).get())
                 .userId(userId)
                 .build();
         likeArticleRepository.save(likeArticle);
@@ -69,7 +69,7 @@ public class LikeService {
 
         // 좋아요 저장
         LikeReply likeReply = LikeReply.builder()
-                .replyId(replyId)
+                .reply(replyRepository.findById(replyId).get())
                 .userId(userId)
                 .build();
         likeReplyRepository.save(likeReply);

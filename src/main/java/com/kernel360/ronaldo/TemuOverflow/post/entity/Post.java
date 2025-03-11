@@ -48,6 +48,6 @@ public class Post {
 
     // 좋아요 개수를 반환하는 메서드
     public int getLikeCount() {
-        return likeArticles.size();
+        return likeArticles ==null ? 0 : likeArticles.size();
     }
 }

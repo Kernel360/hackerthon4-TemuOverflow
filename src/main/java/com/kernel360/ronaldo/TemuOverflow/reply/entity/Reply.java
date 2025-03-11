@@ -45,7 +45,7 @@ public class Reply {
 
     // 좋아요 개수를 반환하는 메서드
     public int getLikeCount() {
-        return likeReplies.size();
+        return likeReplies == null ? 0 : likeReplies.size();
     }
 
 }

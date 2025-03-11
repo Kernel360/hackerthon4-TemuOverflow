@@ -17,8 +17,6 @@ public class LikeArticle {
     @Column
     private Long id;
 
-    private Long articleId;
-
     private Long userId;
 
     @ManyToOne
