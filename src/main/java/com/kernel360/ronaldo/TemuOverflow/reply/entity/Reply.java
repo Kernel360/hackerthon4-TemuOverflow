@@ -1,6 +1,7 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.entity;
 
 import com.kernel360.ronaldo.TemuOverflow.Like.entity.LikeReply;
+import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +27,9 @@ public class Reply {
  //   @ManyToOne(fetch = LAZY)
     private Long postId;
 
-    @Column(name = "user_id", nullable = false)
-   // @ManyToOne(fetch = LAZY)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

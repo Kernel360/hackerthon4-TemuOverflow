@@ -6,6 +6,7 @@ import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.UpdateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.reply.repository.ReplyRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,13 @@ import java.util.List;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final UserRepository userRepository;
 
     // 댓글 생성
     public ReplyDto createReply(Long userId, CreateReplyRequest createReplyRequest) {
         Reply reply = Reply.builder()
                 .postId(createReplyRequest.getPostId())
-                .userId(userId)
+                .user(userRepository.findById(userId).orElse(null))
                 .createdAt(LocalDateTime.now())
                 .content(createReplyRequest.getContent())
                 .build();

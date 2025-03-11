@@ -10,6 +10,8 @@ import com.kernel360.ronaldo.TemuOverflow.reply.dto.UpdateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.reply.repository.ReplyRepository;
 import com.kernel360.ronaldo.TemuOverflow.reply.service.ReplyService;
+import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,6 +37,7 @@ public class ReplyController {
     private final ChatService chatService;
     private final UserAuthService userAuthService;
     private final ReplyRepository replyRepository;
+    private final UserRepository userRepository;
 
     // 댓글 생성 (POST)
     @PostMapping
@@ -91,13 +95,15 @@ public class ReplyController {
 
             ChatRequest chatRequest = new ChatRequest(aiPrompt);
 
+            User userAI = userRepository.findById(7777777L).orElse(null);
+
             // 3. AI 서비스에 요청하고 결과를 댓글로 저장
             return chatService.processChat(chatRequest)
                     .map(chatResponse -> {
                         // AI 응답으로 댓글 생성
                         Reply reply = Reply.builder()
                                 .postId(postId)
-                                .userId(1L) // AI 사용자 ID (시스템 사용자나 AI 전용 사용자 ID 설정)
+                                .user(userAI) // AI 사용자 ID (시스템 사용자나 AI 전용 사용자 ID 설정)
                                 .content(chatResponse.getReply())
                                 .createdAt(LocalDateTime.now())
                                 .updatedAt(LocalDateTime.now())
