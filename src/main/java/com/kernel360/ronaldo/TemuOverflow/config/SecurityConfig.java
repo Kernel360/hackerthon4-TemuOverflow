@@ -51,7 +51,7 @@ public class SecurityConfig {
                         .frameOptions(frameOptions -> frameOptions.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
-                        .requestMatchers("/register", "/login", "login/success").permitAll()
+                        .requestMatchers("/api/register", "/api/login", "/api/login/success").permitAll()
                         .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
