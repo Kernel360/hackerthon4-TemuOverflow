@@ -82,7 +82,7 @@ public class PostController {
     }
 
     // 페이지네이션된 전체 게시글 조회 (GET)
-    @GetMapping("/page")
+    @GetMapping
     public ResponseEntity<Page<PostDto>> getPagedPosts(Pageable pageable) {
         Page<PostDto> posts = postService.getPagedPosts(pageable).map(PostDto::fromEntity);
         return ResponseEntity.ok(posts);
