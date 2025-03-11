@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final List<String> NO_CHECK_URLS = List.of("/login", "/register", "/swagger-ui", "/v3/api-docs");
+    private static final List<String> NO_CHECK_URLS = List.of("/api/login", "/api/register", "/swagger-ui", "/v3/api-docs");
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
