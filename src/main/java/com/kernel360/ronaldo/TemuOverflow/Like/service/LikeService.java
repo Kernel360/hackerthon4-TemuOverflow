@@ -56,7 +56,7 @@ public class LikeService {
         }
 
         // 사용자가 이미 해당 게시글에 좋아요를 눌렀는지 확인
-        Optional<LikeReply> existingLike = likeReplyRepository.findByArticleIdAndUserId(replyId, userId);
+        Optional<LikeReply> existingLike = likeReplyRepository.findByReplyIdAndUserId(replyId, userId);
 
         if (existingLike.isPresent()) {
             // 이미 좋아요를 눌렀다면 좋아요 취소
