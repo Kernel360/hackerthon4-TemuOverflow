@@ -8,6 +8,7 @@ import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import com.kernel360.ronaldo.TemuOverflow.user.jwt.util.JwtTokenProvider;
 import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class UserAuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public UserSignUpResponse signUp(UserSignUpRequest userSignupRequest) throws Exception {
+    public UserSignUpResponse signUp(HttpServletRequest request, HttpServletResponse response, UserSignUpRequest userSignupRequest) throws Exception {
 
         if(userRepository.findByEmail(userSignupRequest.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");
@@ -53,6 +54,10 @@ public class UserAuthService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .build();
+
+        String accessToken = jwtTokenProvider.createAccessToken(user.getEmail(), user.getId());
+        jwtTokenProvider.sendAccessToken(response, accessToken);
+
         return userSignUpResponse;
     }
 
