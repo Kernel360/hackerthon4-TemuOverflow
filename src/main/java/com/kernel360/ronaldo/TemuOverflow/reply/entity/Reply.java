@@ -1,11 +1,14 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.entity;
 
+import com.kernel360.ronaldo.TemuOverflow.Like.entity.LikeReply;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "reply")
@@ -37,8 +40,12 @@ public class Reply {
     // 또는 @Column(columnDefinition = "MEDIUMTEXT") 또는 @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LikeReply> likeReplies = new ArrayList<>();
 
-
-
+    // 좋아요 개수를 반환하는 메서드
+    public int getLikeCount() {
+        return likeReplies.size();
+    }
 
 }

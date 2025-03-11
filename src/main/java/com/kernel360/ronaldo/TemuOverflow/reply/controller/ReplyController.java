@@ -4,9 +4,14 @@ import com.kernel360.ronaldo.TemuOverflow.chat.dto.ChatRequest;
 import com.kernel360.ronaldo.TemuOverflow.chat.service.ChatService;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.CreateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.UpdateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
+import com.kernel360.ronaldo.TemuOverflow.reply.repository.ReplyRepository;
 import com.kernel360.ronaldo.TemuOverflow.reply.service.ReplyService;
+import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,12 +32,15 @@ public class ReplyController {
     private final ReplyService replyService;
     private final PostService postService;
     private final ChatService chatService;
+    private final UserAuthService userAuthService;
+    private final ReplyRepository replyRepository;
 
     // 댓글 생성 (POST)
     @PostMapping
-    public ResponseEntity<ReplyDto> createReply(@RequestBody ReplyDto replyDto) {
-        Reply reply = replyService.createReply(replyDto.toEntity());
-        return new ResponseEntity<>(ReplyDto.fromEntity(reply), HttpStatus.CREATED);
+    public ResponseEntity<ReplyDto> createReply(HttpServletRequest request, @RequestBody CreateReplyRequest createReplyRequest) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+        ReplyDto replyDto = replyService.createReply(userId, createReplyRequest);
+        return new ResponseEntity<>(replyDto, HttpStatus.CREATED);
     }
 
     // 특정 게시글(PostId)에 대한 댓글 리스트 조회 (GET)
@@ -54,9 +62,10 @@ public class ReplyController {
 
     // 댓글 수정 (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<ReplyDto> updateReply(@PathVariable Long id, @RequestBody ReplyDto replyDto) {
-        Reply reply = replyService.updateReply(id, replyDto.toEntity());
-        return ResponseEntity.ok(replyDto.fromEntity(reply));
+    public ResponseEntity<ReplyDto> updateReply(HttpServletRequest request, @PathVariable Long id, @RequestBody UpdateReplyRequest updateReplyRequest) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+        ReplyDto replyDto = replyService.updateReply(userId, id, updateReplyRequest);
+        return ResponseEntity.ok(replyDto);
     }
 
     // 댓글 삭제 (DELETE)
@@ -93,11 +102,9 @@ public class ReplyController {
                                 .createdAt(LocalDateTime.now())
                                 .updatedAt(LocalDateTime.now())
                                 .build();
+                        replyRepository.save(reply);
 
-                        // 댓글 저장
-                        Reply savedReply = replyService.createReply(reply);
-
-                        return ResponseEntity.ok(savedReply);
+                        return ResponseEntity.ok(reply);
                     })
                     .onErrorResume(e -> {
                         log.error("AI 응답 처리 중 오류 발생", e);

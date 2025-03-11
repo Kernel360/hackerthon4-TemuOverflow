@@ -1,6 +1,9 @@
 package com.kernel360.ronaldo.TemuOverflow.post.controller;
 
+import com.kernel360.ronaldo.TemuOverflow.post.dto.CreatePostRequest;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.CreatePostResponse;
 import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.UpdatePostRequest;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
@@ -23,9 +26,10 @@ public class PostController {
 
     // 게시글 생성 (POST)
     @PostMapping
-    public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto) {
-        Post post = postService.createPost(postDto.toEntity());
-        return new ResponseEntity<>(PostDto.fromEntity(post), HttpStatus.CREATED);
+    public ResponseEntity<PostDto> createPost(HttpServletRequest request, @RequestBody CreatePostRequest createPostRequest) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+        PostDto postDto = postService.createPost(userId, createPostRequest);
+        return new ResponseEntity<>(postDto, HttpStatus.CREATED);
     }
 
     // 전체 게시글 조회 (GET)
@@ -46,9 +50,9 @@ public class PostController {
 
     // 게시글 수정 (PUT)
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @RequestBody PostDto postDto) {
-        Post post = postService.updatePost(id, postDto.toEntity());
-        return ResponseEntity.ok(PostDto.fromEntity(post));
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @RequestBody UpdatePostRequest updatePostRequest) {
+        PostDto postDto = postService.updatePost(id, updatePostRequest);
+        return ResponseEntity.ok(postDto);
     }
 
     // 게시글 삭제 (DELETE)
