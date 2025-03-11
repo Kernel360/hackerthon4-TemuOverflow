@@ -22,6 +22,7 @@ public class PostDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private int likeCount;
+    private boolean isLikedByCurrentUser;
 //    private boolean isSolved;
 //    private String category;
 

@@ -1,8 +1,10 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.controller;
 
+import com.kernel360.ronaldo.TemuOverflow.Like.repository.LikeReplyRepository;
 import com.kernel360.ronaldo.TemuOverflow.chat.dto.ChatRequest;
 import com.kernel360.ronaldo.TemuOverflow.chat.service.ChatService;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
+import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
 import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.CreateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
@@ -38,6 +40,8 @@ public class ReplyController {
     private final UserAuthService userAuthService;
     private final ReplyRepository replyRepository;
     private final UserRepository userRepository;
+    private final LikeReplyRepository likeReplyRepository;
+    private final PostRepository postRepository;
 
     // 댓글 생성 (POST)
     @PostMapping
@@ -49,10 +53,30 @@ public class ReplyController {
 
     // 특정 게시글(PostId)에 대한 댓글 리스트 조회 (GET)
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<ReplyDto>> getRepliesByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<ReplyDto>> getRepliesByPostId(HttpServletRequest request, @PathVariable Long postId) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+
         List<Reply> replies = replyService.getRepliesByPostId(postId);
+
         List<ReplyDto> replyDtos = replies.stream()
-                .map(ReplyDto::fromEntity)
+                .map(reply -> {
+                    ReplyDto dto = ReplyDto.fromEntity(reply);
+                    boolean isLiked = reply.getLikeReplies().stream()
+                            .anyMatch(likeReply -> likeReply.getUserId().equals(userId));
+
+                    return new ReplyDto(
+                            dto.getId(),
+                            dto.getPostId(),
+                            dto.getUserId(),
+                            dto.getUserNickname(),
+                            dto.getUserProfileImageUrl(),
+                            dto.getCreatedAt(),
+                            dto.getUpdatedAt(),
+                            dto.getContent(),
+                            dto.getLikeCount(),
+                            isLiked  // 현재 사용자가 좋아요를 눌렀는지 여부 추가
+                    );
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(replyDtos);
     }
@@ -84,7 +108,7 @@ public class ReplyController {
     public Mono<ResponseEntity<Reply>> createAiReply(@PathVariable Long postId) {
         try {
             // 1. 게시물 조회
-            Post post = postService.getPostById(postId);
+            Post post = postRepository.findById(postId).orElseThrow();
 
             // 2. AI에게 질문할 메시지 구성
             String aiPrompt = String.format(

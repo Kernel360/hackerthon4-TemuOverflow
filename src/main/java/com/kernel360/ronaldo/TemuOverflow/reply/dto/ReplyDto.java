@@ -24,6 +24,7 @@ ReplyDto {
     private LocalDateTime updatedAt;
     private String content;
     private int likeCount;
+    private boolean isLikedByCurrentUser;
 
 
     // 데이터베이스에서 조회한 엔티티를 클라이언트에 반환할때 사용

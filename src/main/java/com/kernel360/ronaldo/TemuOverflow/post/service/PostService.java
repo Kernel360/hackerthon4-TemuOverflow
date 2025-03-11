@@ -7,16 +7,20 @@ import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
 import com.kernel360.ronaldo.TemuOverflow.post.dto.UpdatePostRequest;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
+import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,14 +47,30 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    // 게시글 상세 조회
-    public Post getPostById(Long id) {
-        return postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+    // 게시글 상세 조회 -> id는 postId임
+    public PostDto getPostById(Long userId, Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+
+        boolean isLikedByCurrentUser = post.getLikeArticles().stream()
+                .anyMatch(likeArticle -> likeArticle.getUserId().equals(userId));
+
+        return PostDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .userId(post.getUser().getId())
+                .userNickname(post.getUser().getNickname())
+                .userProfileImageUrl(post.getUser().getProfileImageUrl())
+                .likeCount(post.getLikeCount())
+                .isLikedByCurrentUser(isLikedByCurrentUser)
+                .build();
     }
 
     // 게시글 수정
     public PostDto updatePost(Long id, UpdatePostRequest updatePostRequest) {
-        Post post = getPostById(id);
+        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
         post.setTitle(updatePostRequest.getTitle());
         post.setContent(updatePostRequest.getContent());
         post.setUpdatedAt(LocalDateTime.now());
