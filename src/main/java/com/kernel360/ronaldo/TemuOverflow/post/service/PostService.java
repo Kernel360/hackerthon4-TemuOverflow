@@ -11,6 +11,8 @@ import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -79,6 +81,11 @@ public class PostService {
     // 게시글 검색
     public List<Post> searchPosts(String keyword) {
         return postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
+    }
+
+    // 페이지네이션
+    public Page<Post> getPagedPosts(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 }
 

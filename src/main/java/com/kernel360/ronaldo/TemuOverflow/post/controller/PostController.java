@@ -9,6 +9,8 @@ import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -76,5 +78,12 @@ public class PostController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(posts);
 
+    }
+
+    // 페이지네이션된 전체 게시글 조회 (GET)
+    @GetMapping("/page-posts")
+    public ResponseEntity<Page<PostDto>> getPagedPosts(Pageable pageable) {
+        Page<PostDto> posts = postService.getPagedPosts(pageable).map(PostDto::fromEntity);
+        return ResponseEntity.ok(posts);
     }
 }
