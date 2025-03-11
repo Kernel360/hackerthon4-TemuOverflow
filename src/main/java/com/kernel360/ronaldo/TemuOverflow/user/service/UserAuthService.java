@@ -2,6 +2,7 @@ package com.kernel360.ronaldo.TemuOverflow.user.service;
 
 import com.kernel360.ronaldo.TemuOverflow.s3.S3Service;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpRequest;
+import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.Role;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import com.kernel360.ronaldo.TemuOverflow.user.jwt.util.JwtTokenProvider;
@@ -23,7 +24,7 @@ public class UserAuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public User signUp(UserSignUpRequest userSignupRequest) throws Exception {
+    public UserSignUpResponse signUp(UserSignUpRequest userSignupRequest) throws Exception {
 
         if(userRepository.findByEmail(userSignupRequest.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already in use");
@@ -46,7 +47,13 @@ public class UserAuthService {
                 .role(Role.USER)
                 .build();
         user.passwordEncode(passwordEncoder);
-        return userRepository.save(user);
+        userRepository.save(user);
+        UserSignUpResponse userSignUpResponse = UserSignUpResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .build();
+        return userSignUpResponse;
     }
 
     public Long getUserIdFromToken(HttpServletRequest request) {

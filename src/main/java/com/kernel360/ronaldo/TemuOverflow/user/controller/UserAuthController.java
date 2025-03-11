@@ -1,6 +1,7 @@
 package com.kernel360.ronaldo.TemuOverflow.user.controller;
 
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpRequest;
+import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,28 +11,26 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserAuthController {
 
     private final UserAuthService userAuthService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestParam("email") String email,
+    public ResponseEntity<UserSignUpResponse> register(@RequestParam("email") String email,
                                          @RequestParam("password") String password,
                                          @RequestParam("nickname") String nickname,
                                          @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws Exception {
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, password, nickname, profileImage);
-        User user = userAuthService.signUp(userSignUpRequest);
-        return ResponseEntity.ok(user);
+        UserSignUpResponse userSignUpResponse = userAuthService.signUp(userSignUpRequest);
+        return ResponseEntity.ok(userSignUpResponse);
     }
 
     @Operation(summary = "일반 로그인 (로그인 요청을 통해 JWT 토큰을 발급받음)")
