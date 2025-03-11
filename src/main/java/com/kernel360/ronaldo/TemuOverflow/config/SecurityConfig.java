@@ -110,6 +110,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*"); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 쿠키 포함 허용
+        configuration.addExposedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
