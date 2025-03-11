@@ -34,14 +34,14 @@ public class PostController {
         return new ResponseEntity<>(postDto, HttpStatus.CREATED);
     }
 
-    // 전체 게시글 조회 (GET)
-    @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts() {
-        List<PostDto> posts = postService.getAllPosts().stream()
-                .map(PostDto::fromEntity)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(posts);
-    }
+//    // 전체 게시글 조회 (GET)
+//    @GetMapping
+//    public ResponseEntity<List<PostDto>> getAllPosts() {
+//        List<PostDto> posts = postService.getAllPosts().stream()
+//                .map(PostDto::fromEntity)
+//                .collect(Collectors.toList());
+//        return ResponseEntity.ok(posts);
+//    }
 
     // 게시글 상세 조회 (GET)
     @GetMapping("/{id}")
