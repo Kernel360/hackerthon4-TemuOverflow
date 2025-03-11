@@ -8,6 +8,8 @@ import com.kernel360.ronaldo.TemuOverflow.Like.entity.LikeReply;
 import com.kernel360.ronaldo.TemuOverflow.Like.repository.LikeArticleRepository;
 import com.kernel360.ronaldo.TemuOverflow.Like.repository.LikeReplyRepository;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
+import com.kernel360.ronaldo.TemuOverflow.reply.repository.ReplyRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class LikeService {
     private final LikeArticleRepository likeArticleRepository;
     private final LikeReplyRepository likeReplyRepository;
     private final PostRepository postRepository;
+    private final ReplyRepository replyRepository;
 
     public LikeArticleResponse likeArticle(Long userId, LikeRequest likeArticleRequest) {
         Long articleId = likeArticleRequest.getObjectId();
@@ -50,7 +53,7 @@ public class LikeService {
     public LikeReplyResponse likeReply(Long userId, LikeRequest likeReplyRequest) {
         Long replyId = likeReplyRequest.getObjectId();
 
-        boolean replyExists = postRepository.existsById(replyId);
+        boolean replyExists = replyRepository.existsById(replyId);
         if (!replyExists) {
             throw new IllegalArgumentException("존재하지 않는 댓글입니다.");
         }
