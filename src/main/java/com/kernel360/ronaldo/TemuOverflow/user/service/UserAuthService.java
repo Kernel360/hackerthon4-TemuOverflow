@@ -1,6 +1,7 @@
 package com.kernel360.ronaldo.TemuOverflow.user.service;
 
 import com.kernel360.ronaldo.TemuOverflow.s3.S3Service;
+import com.kernel360.ronaldo.TemuOverflow.user.dto.GetUserResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpRequest;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.Role;
@@ -59,6 +60,15 @@ public class UserAuthService {
         jwtTokenProvider.sendAccessToken(response, accessToken);
 
         return userSignUpResponse;
+    }
+
+    public GetUserResponse getUserInfo(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return GetUserResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .id(user.getId())
+                .build();
     }
 
     public Long getUserIdFromToken(HttpServletRequest request) {
