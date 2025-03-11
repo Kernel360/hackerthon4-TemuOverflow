@@ -30,7 +30,7 @@ public class Post {
     @Column(nullable = false, length = 45)
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
     @Column(name = "created_at", updatable = false)
