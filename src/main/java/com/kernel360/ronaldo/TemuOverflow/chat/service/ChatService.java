@@ -32,7 +32,6 @@ public class ChatService {
         this.webClient = webClient;
     }
 
-
     public Mono<ChatResponse> processChat(ChatRequest chatRequest) {
         log.debug("Processing chat request: {}", chatRequest.getMessage());
 
