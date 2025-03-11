@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReplyDto {
+public class
+ReplyDto {
     private Long id;
     private Long postId;
     private Long userId;

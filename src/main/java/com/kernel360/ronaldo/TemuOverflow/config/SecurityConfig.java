@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
                         .requestMatchers("/api/register", "/api/login", "/api/login/success").permitAll()
                         .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers( "/api/reply/ai/**").permitAll()
                         .requestMatchers("/api/chat/**").permitAll() // 채팅 API 접근 허용
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
