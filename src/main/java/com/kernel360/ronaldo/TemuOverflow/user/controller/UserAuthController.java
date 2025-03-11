@@ -1,5 +1,6 @@
 package com.kernel360.ronaldo.TemuOverflow.user.controller;
 
+import com.kernel360.ronaldo.TemuOverflow.user.dto.GetUserResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpRequest;
 import com.kernel360.ronaldo.TemuOverflow.user.dto.UserSignUpResponse;
 import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
@@ -35,6 +36,12 @@ public class UserAuthController {
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, password, nickname, profileImage);
         UserSignUpResponse userSignUpResponse = userAuthService.signUp(request, response, userSignUpRequest);
         return ResponseEntity.ok(userSignUpResponse);
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<GetUserResponse> getUserInfo(HttpServletRequest request) {
+        Long userId = userAuthService.getUserIdFromToken(request);
+        return ResponseEntity.ok(userAuthService.getUserInfo(userId));
     }
 
     @Operation(summary = "일반 로그인 (로그인 요청을 통해 JWT 토큰을 발급받음)")
