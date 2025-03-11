@@ -2,6 +2,7 @@ package com.kernel360.ronaldo.TemuOverflow.post.entity;
 
 import com.kernel360.ronaldo.TemuOverflow.Like.entity.LikeArticle;
 import com.kernel360.ronaldo.TemuOverflow.Like.entity.LikeReply;
+import com.kernel360.ronaldo.TemuOverflow.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +23,9 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false, length = 45)
     private String title;

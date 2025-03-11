@@ -18,6 +18,8 @@ ReplyDto {
     private Long id;
     private Long postId;
     private Long userId;
+    private String userNickname;
+    private String userProfileImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String content;
@@ -29,7 +31,9 @@ ReplyDto {
         return ReplyDto.builder()
                 .id(reply.getId())
                 .postId(reply.getPostId())
-                .userId(reply.getUserId())
+                .userId(reply.getUser().getId())
+                .userNickname(reply.getUser().getNickname())
+                .userProfileImageUrl(reply.getUser().getProfileImageUrl())
                 .content(reply.getContent())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt() == null ? LocalDateTime.MIN : reply.getUpdatedAt())

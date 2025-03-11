@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 public class PostDto {
     private Long id;
     private Long userId;
+    private String userNickname;
+    private String userProfileImageUrl;
     private String title;
     private String content;
     private LocalDateTime createdAt;
@@ -28,7 +30,9 @@ public class PostDto {
     public static PostDto fromEntity(Post post) {
         return PostDto.builder()
                 .id(post.getId())
-                .userId(post.getUserId())
+                .userId(post.getUser().getId())
+                .userNickname(post.getUser().getNickname())
+                .userProfileImageUrl(post.getUser().getProfileImageUrl())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())

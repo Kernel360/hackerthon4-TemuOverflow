@@ -7,6 +7,7 @@ import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
 import com.kernel360.ronaldo.TemuOverflow.post.dto.UpdatePostRequest;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
+import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
@@ -21,11 +22,12 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserAuthService userAuthService;
+    private final UserRepository userRepository;
 
     // 게시글 생성
     public PostDto createPost(Long userId, CreatePostRequest createPostRequest) {
         Post post = Post.builder()
-                .userId(userId)
+                .user(userRepository.findById(userId).orElse(null))
                 .title(createPostRequest.getTitle())
                 .content(createPostRequest.getContent())
                 .createdAt(LocalDateTime.now())
