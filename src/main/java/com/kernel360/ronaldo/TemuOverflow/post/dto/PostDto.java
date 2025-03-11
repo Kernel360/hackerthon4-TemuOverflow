@@ -19,8 +19,9 @@ public class PostDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean isSolved;
-    private String category;
+    private int likeCount;
+//    private boolean isSolved;
+//    private String category;
 
 
     // 데이터베이스에서 조회한 엔티티를 클라이언트에 반환할때 사용
@@ -31,23 +32,24 @@ public class PostDto {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
-                .isSolved(post.getIsSolved())
-                .category(post.getCategory())
+                .updatedAt(post.getUpdatedAt() == null ? LocalDateTime.MIN : post.getUpdatedAt())
+                .likeCount(post.getLikeCount())
+//                .isSolved(post.getIsSolved() == null ? false : post.getIsSolved())
+//                .category(post.getCategory() == null ? "null" : post.getCategory())
                 .build();
     }
-
-    // 클라이언트에서 받은 DTO를 데이터베이스에 저장할때 사용
-    public Post toEntity() {
-        return Post.builder()
-                .id(this.id)
-                .userId(this.userId)
-                .title(this.title)
-                .content(this.content)
-                .createdAt(this.createdAt)
-                .updatedAt(this.updatedAt)
-                .isSolved(this.isSolved)
-                .category(this.category)
-                .build();
-    }
+//
+//    // 클라이언트에서 받은 DTO를 데이터베이스에 저장할때 사용
+//    public Post toEntity() {
+//        return Post.builder()
+//                .id(this.id)
+//                .userId(this.userId)
+//                .title(this.title)
+//                .content(this.content)
+//                .createdAt(this.createdAt)
+//                .updatedAt(this.updatedAt)
+//                .isSolved(this.isSolved)
+//                .category(this.category)
+//                .build();
+//    }
 }

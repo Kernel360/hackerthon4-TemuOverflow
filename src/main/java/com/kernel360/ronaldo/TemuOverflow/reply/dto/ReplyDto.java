@@ -21,7 +21,7 @@ ReplyDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String content;
-    private int like;
+    private int likeCount;
 
 
     // 데이터베이스에서 조회한 엔티티를 클라이언트에 반환할때 사용
@@ -31,17 +31,20 @@ ReplyDto {
                 .postId(reply.getPostId())
                 .userId(reply.getUserId())
                 .content(reply.getContent())
+                .createdAt(reply.getCreatedAt())
+                .updatedAt(reply.getUpdatedAt() == null ? LocalDateTime.MIN : reply.getUpdatedAt())
+                .likeCount(reply.getLikeCount())
                 .build();
     }
 
-    // 클라이언트에서 받은 DTO를 데이터베이스에 저장할때 사용
-    public Reply toEntity() {
-        return Reply.builder()
-                .id(this.id)
-                .postId(this.postId)
-                .userId(this.userId)
-                .content(this.content)
-                .build();
-    }
+//    // 클라이언트에서 받은 DTO를 데이터베이스에 저장할때 사용
+//    public Reply toEntity() {
+//        return Reply.builder()
+//                .id(this.id)
+//                .postId(this.postId)
+//                .userId(this.userId)
+//                .content(this.content)
+//                .build();
+//    }
 
 }

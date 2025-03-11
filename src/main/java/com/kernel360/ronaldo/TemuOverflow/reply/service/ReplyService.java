@@ -1,11 +1,15 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.service;
 
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.CreateReplyRequest;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
+import com.kernel360.ronaldo.TemuOverflow.reply.dto.UpdateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -16,8 +20,15 @@ public class ReplyService {
     private final ReplyRepository replyRepository;
 
     // 댓글 생성
-    public Reply createReply(Reply reply) {
-        return replyRepository.save(reply);
+    public ReplyDto createReply(Long userId, CreateReplyRequest createReplyRequest) {
+        Reply reply = Reply.builder()
+                .postId(createReplyRequest.getPostId())
+                .userId(userId)
+                .createdAt(LocalDateTime.now())
+                .content(createReplyRequest.getContent())
+                .build();
+        replyRepository.save(reply);
+        return ReplyDto.fromEntity(reply);
     }
 
     // 전체 게시글 조회
@@ -31,10 +42,11 @@ public class ReplyService {
     }
 
     // 게시글 수정
-    public Reply updateReply(Long id, Reply updatedReply) {
+    public ReplyDto updateReply(Long userId, Long id, UpdateReplyRequest updateReplyRequest) {
         Reply reply = getReplyById(id);
-        reply.setContent(updatedReply.getContent());
-        return replyRepository.save(reply);
+        reply.setContent(updateReplyRequest.getContent());
+        replyRepository.save(reply);
+        return ReplyDto.fromEntity(reply);
     }
 
     // 게시글 삭제

@@ -1,11 +1,18 @@
 package com.kernel360.ronaldo.TemuOverflow.post.service;
 
+import com.amazonaws.services.kms.model.CreateAliasRequest;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.CreatePostRequest;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.CreatePostResponse;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
+import com.kernel360.ronaldo.TemuOverflow.post.dto.UpdatePostRequest;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -16,8 +23,15 @@ public class PostService {
     private final UserAuthService userAuthService;
 
     // 게시글 생성
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public PostDto createPost(Long userId, CreatePostRequest createPostRequest) {
+        Post post = Post.builder()
+                .userId(userId)
+                .title(createPostRequest.getTitle())
+                .content(createPostRequest.getContent())
+                .createdAt(LocalDateTime.now())
+                .build();
+        postRepository.save(post);
+        return PostDto.fromEntity(post);
     }
 
     // 전체 게시글 조회
@@ -31,14 +45,15 @@ public class PostService {
     }
 
     // 게시글 수정
-    public Post updatePost(Long id, Post updatedPost) {
+    public PostDto updatePost(Long id, UpdatePostRequest updatePostRequest) {
         Post post = getPostById(id);
-        post.setTitle(updatedPost.getTitle());
-        post.setContent(updatedPost.getContent());
-        post.setCategory(updatedPost.getCategory());
-        post.setIsSolved(updatedPost.getIsSolved());
-        post.setUpdatedAt(updatedPost.getUpdatedAt());
-        return postRepository.save(post);
+        post.setTitle(updatePostRequest.getTitle());
+        post.setContent(updatePostRequest.getContent());
+        post.setUpdatedAt(LocalDateTime.now());
+//        post.setCategory(updatedPost.getCategory());
+//        post.setIsSolved(updatedPost.getIsSolved());
+        postRepository.save(post);
+        return PostDto.fromEntity(post);
     }
 
     // 게시글 삭제
