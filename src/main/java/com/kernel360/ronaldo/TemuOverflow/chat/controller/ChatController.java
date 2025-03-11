@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/chat")
-@CrossOrigin(origins = "*") // 개발용. 프로덕션에서는 구체적인 출처 지정 필요
 @RequiredArgsConstructor
 public class ChatController {
 
