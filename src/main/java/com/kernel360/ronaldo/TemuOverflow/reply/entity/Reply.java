@@ -37,7 +37,7 @@ public class Reply {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     // 또는 @Column(columnDefinition = "MEDIUMTEXT") 또는 @Column(columnDefinition = "LONGTEXT")
     private String content;
 
