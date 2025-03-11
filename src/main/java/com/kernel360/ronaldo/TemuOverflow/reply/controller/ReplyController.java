@@ -4,6 +4,7 @@ import com.kernel360.ronaldo.TemuOverflow.Like.repository.LikeReplyRepository;
 import com.kernel360.ronaldo.TemuOverflow.chat.dto.ChatRequest;
 import com.kernel360.ronaldo.TemuOverflow.chat.service.ChatService;
 import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
+import com.kernel360.ronaldo.TemuOverflow.post.repository.PostRepository;
 import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.CreateReplyRequest;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
@@ -40,6 +41,7 @@ public class ReplyController {
     private final ReplyRepository replyRepository;
     private final UserRepository userRepository;
     private final LikeReplyRepository likeReplyRepository;
+    private final PostRepository postRepository;
 
     // 댓글 생성 (POST)
     @PostMapping
@@ -106,7 +108,7 @@ public class ReplyController {
     public Mono<ResponseEntity<Reply>> createAiReply(@PathVariable Long postId) {
         try {
             // 1. 게시물 조회
-            Post post = postService.getPostById(postId);
+            Post post = postRepository.findById(postId).orElseThrow();
 
             // 2. AI에게 질문할 메시지 구성
             String aiPrompt = String.format(
