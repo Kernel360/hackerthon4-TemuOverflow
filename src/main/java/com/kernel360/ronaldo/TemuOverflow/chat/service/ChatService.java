@@ -13,6 +13,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @Slf4j
 @Service
 public class ChatService {
@@ -46,6 +48,7 @@ public class ChatService {
                 .bodyValue(claudeRequest)
                 .retrieve()
                 .bodyToMono(ClaudeResponse.class)
+                .timeout(Duration.ofSeconds(60))  // 타임아웃 명시적 설정
                 .doOnError(WebClientResponseException.class, e -> {
                     log.error("Error calling Claude API: {}", e.getResponseBodyAsString(), e);
                 })

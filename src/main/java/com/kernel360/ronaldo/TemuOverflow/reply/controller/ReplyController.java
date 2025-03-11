@@ -1,5 +1,7 @@
 package com.kernel360.ronaldo.TemuOverflow.reply.controller;
 
+import com.kernel360.ronaldo.TemuOverflow.post.dto.PostDto;
+import com.kernel360.ronaldo.TemuOverflow.post.entity.Post;
 import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.reply.service.ReplyService;
@@ -35,6 +37,14 @@ public class ReplyController {
         return ResponseEntity.ok(replyDtos);
     }
 
+    // 게시글 상세 조회 (GET)
+    @GetMapping("/{id}")
+    public ResponseEntity<ReplyDto> getPostById(@PathVariable Long id) {
+        Reply reply = replyService.getReplyById(id);
+        return ResponseEntity.ok(ReplyDto.fromEntity(reply));
+    }
+
+
     // 댓글 수정 (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<ReplyDto> updateReply(@PathVariable Long id, @RequestBody ReplyDto replyDto) {
@@ -42,7 +52,7 @@ public class ReplyController {
         return ResponseEntity.ok(replyDto.fromEntity(reply));
     }
 
-    // 게시글 삭제 (DELETE)
+    // 댓글 삭제 (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         replyService.deletePost(id);
