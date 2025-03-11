@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +26,14 @@ public class UserAuthController {
     private final UserAuthService userAuthService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserSignUpResponse> register(@RequestParam("email") String email,
+    public ResponseEntity<UserSignUpResponse> register(
+                                         HttpServletRequest request, HttpServletResponse response,
+                                         @RequestParam("email") String email,
                                          @RequestParam("password") String password,
                                          @RequestParam("nickname") String nickname,
                                          @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws Exception {
         UserSignUpRequest userSignUpRequest = new UserSignUpRequest(email, password, nickname, profileImage);
-        UserSignUpResponse userSignUpResponse = userAuthService.signUp(userSignUpRequest);
+        UserSignUpResponse userSignUpResponse = userAuthService.signUp(request, response, userSignUpRequest);
         return ResponseEntity.ok(userSignUpResponse);
     }
 
