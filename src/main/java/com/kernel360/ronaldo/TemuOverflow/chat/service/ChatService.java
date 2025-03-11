@@ -35,6 +35,7 @@ public class ChatService {
     }
 
     public Mono<ChatResponse> processChat(ChatRequest chatRequest) {
+        log.info("Processing chat request(info): {}", chatRequest.getMessage());
         log.debug("Processing chat request: {}", chatRequest.getMessage());
 
         ClaudeRequest claudeRequest = ClaudeRequest.createRequest(
