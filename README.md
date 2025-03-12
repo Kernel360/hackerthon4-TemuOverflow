@@ -13,6 +13,8 @@
 ## 🎬 시연 영상
 ![테무플로우시연초압축버전](https://github.com/user-attachments/assets/a9b0182f-8cc8-4ad0-984e-768e7a120b56)
 
+## 배포 링크
+http://temuoverflow.s3-website.ap-northeast-2.amazonaws.com/
 
 ## 📝 프로젝트 소개
 TemuOverflow는 AI를 결합한 **한국형 스택 오버플로우**로, 개발자들이 코드 에러를 공유하고 해결할 수 있도록 돕는 웹 서비스입니다.
