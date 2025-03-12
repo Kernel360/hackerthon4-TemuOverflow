@@ -130,7 +130,7 @@ public class ReplyController {
                                 .user(userAI) // AI 사용자 ID (시스템 사용자나 AI 전용 사용자 ID 설정)
                                 .content(chatResponse.getReply())
                                 .createdAt(LocalDateTime.now())
-                                .updatedAt(LocalDateTime.now())
+//                                .updatedAt(LocalDateTime.now())
                                 .build();
                         replyRepository.save(reply);
 
