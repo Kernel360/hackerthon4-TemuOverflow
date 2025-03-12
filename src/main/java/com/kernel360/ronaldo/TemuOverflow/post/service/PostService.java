@@ -78,6 +78,7 @@ public class PostService {
                 .userProfileImageUrl(post.getUser().getProfileImageUrl())
                 .likeCount(post.getLikeCount())
                 .isLikedByCurrentUser(isLikedByCurrentUser)
+                .isSolved(post.getIsSolved())
                 .build();
     }
 
