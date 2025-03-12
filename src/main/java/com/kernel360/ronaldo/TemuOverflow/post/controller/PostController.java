@@ -9,6 +9,7 @@ import com.kernel360.ronaldo.TemuOverflow.post.service.PostService;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/article")
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -51,8 +53,8 @@ public class PostController {
     // 게시글 상세 조회 (GET)
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(HttpServletRequest request, @PathVariable Long id) {
-        Long userId = userAuthService.getUserIdFromToken(request);
-        PostDto postDto = postService.getPostById(userId, id);
+        //Long userId = userAuthService.getUserIdFromToken(request);
+        PostDto postDto = postService.getPostById(request, id);
         return ResponseEntity.ok(postDto);
     }
 
@@ -91,4 +93,11 @@ public class PostController {
         return ResponseEntity.ok(postDtos);
     }
 
+
+    @PatchMapping("/change-status/{id}")
+    public ResponseEntity<PostDto> changeStatus(HttpServletRequest request, @PathVariable Long id) {
+        log.info("controller로 왔음 상태변경");
+        Long userId = userAuthService.getUserIdFromToken(request);
+        return ResponseEntity.ok(postService.changeStatus(userId, id));
+    }
 }

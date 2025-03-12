@@ -21,12 +21,25 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final List<String> NO_CHECK_URLS = List.of("/api/login", "/api/register", "/swagger-ui", "/v3/api-docs", "/api/chat","/api/reply/ai/" );
+//    private static final List<String> NO_CHECK_URLS = List.of("/api/login", "/api/register", "/swagger-ui", "/v3/api-docs", "/api/chat","/api/reply/ai/", "/api/reply/post", "/api/article", "api/article/search");
+
+    private static final Map<String, List<String>> NO_CHECK_METHODS = Map.of(
+            "/api/login", List.of("POST"),
+            "/api/register", List.of("POST"),
+            "/api/chat", List.of("POST"),
+            "/api/reply/ai/", List.of("POST"),
+            "/api/reply/post", List.of("GET"),
+            "/api/article", List.of("GET"),
+            "/api/article/search", List.of("GET"),
+            "/swagger-ui", List.of("GET"),
+            "/v3/api-docs", List.of("GET")
+    );
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
@@ -36,10 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        log.info("Request URI: {}", requestURI);
+        String method = request.getMethod(); // HTTP 메서드 확인
+        log.info("Request URI: {} | Method: {}", requestURI, method);
         try {
             log.info("Attempting to authenticate user {}", requestURI);
-            if (NO_CHECK_URLS.stream().anyMatch(requestURI::startsWith)) {
+            if (NO_CHECK_METHODS.entrySet().stream()
+                    .anyMatch(entry -> requestURI.startsWith(entry.getKey()) && entry.getValue().contains(method))) {
                 log.info("Skipping authentication for user {}", requestURI);
                 filterChain.doFilter(request, response);
                 log.info("다음 필터로 넘어 갔음! {}", requestURI);

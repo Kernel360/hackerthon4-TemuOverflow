@@ -11,7 +11,9 @@ import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,10 +23,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -49,11 +53,19 @@ public class PostService {
     }
 
     // 게시글 상세 조회 -> id는 postId임
-    public PostDto getPostById(Long userId, Long id) {
+    public PostDto getPostById(HttpServletRequest request, Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
 
-        boolean isLikedByCurrentUser = post.getLikeArticles().stream()
-                .anyMatch(likeArticle -> likeArticle.getUserId().equals(userId));
+        boolean isLikedByCurrentUser;
+
+        if(userAuthService.isTokenExist(request)) {
+            Long userId = userAuthService.getUserIdFromToken(request);
+
+            isLikedByCurrentUser = post.getLikeArticles().stream()
+                    .anyMatch(likeArticle -> likeArticle.getUserId().equals(userId));
+        } else {
+            isLikedByCurrentUser = false;
+        }
 
         return PostDto.builder()
                 .id(post.getId())
@@ -105,6 +117,28 @@ public class PostService {
     // 게시글 페이지네이션
     public Page<Post> getPagedPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
+    }
+
+    public PostDto changeStatus(Long userId, Long postId) {
+        // userId를 바탕으로 현재 게시글(postId) 작성자(post.user.getuserId)인지 확인하고
+        // 맞으면 isSolved 변경(isSolved의 현재 상태에 따라 반대로 변경)
+        log.info("changeStatus 진입");
+        if(isArticleWrittenByUser(userId, postId)) {
+            Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+            if(post.getIsSolved() == null || !post.getIsSolved()) {
+                post.setIsSolved(true);
+            } else {
+                post.setIsSolved(false);
+            }
+            log.info("post정보: " + post.toString());
+            return PostDto.fromEntity(postRepository.save(post));
+        }
+        throw new IllegalStateException("상태변경 실패");
+    }
+
+    private boolean isArticleWrittenByUser(Long userId, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
+        return Objects.equals(userId, post.getUser().getId());
     }
 }
 
