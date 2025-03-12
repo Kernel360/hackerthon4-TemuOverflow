@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -85,7 +86,6 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-
     // 랜덤으로 게시글 조회(랜덤 에러)
     public Post getRandomPost(Long userId) {
         long count = postRepository.count();
@@ -97,13 +97,12 @@ public class PostService {
         return postRepository.findPostByIndex(randomIndex);
     }
 
-
     // 게시글 검색
-    public List<Post> searchPosts(String keyword) {
-        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
+    public Page<Post> searchPosts(String keyword, Pageable pageable) {
+        return postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
     }
 
-    // 페이지네이션
+    // 게시글 페이지네이션
     public Page<Post> getPagedPosts(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
