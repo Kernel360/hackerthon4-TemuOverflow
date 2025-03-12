@@ -28,7 +28,7 @@ public class ChatService {
     private Integer maxTokens;
 
     // 고정 시스템 프롬프트 설정 - @Value 애노테이션 제거하고 직접 변수에 할당
-    private final String prompt = "넌 코딩 에러 도우미야. 입력으로 받은 코딩 에러 메시지를 분석해서 해결 방법을 한국어도 응답해줘.";
+    private final String prompt = "너는 코딩 에러 분석 전문가야. 사용자가 제공한 에러 메시지를 세심하게 분석하고, 가능한 원인과 단계별 해결 방법을 한국어로 300자 이내로 상세히 설명해줘.";
 
     public ChatService(WebClient webClient) {
         this.webClient = webClient;
