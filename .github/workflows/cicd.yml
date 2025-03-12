@@ -87,6 +87,7 @@ jobs:
             docker stop spring-app || true
             docker rm spring-app || true
             docker run -d --name spring-app -p 80:8080 \
+            -e TZ=Asia/Seoul \
             -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} \
             -e MYSQL_PORT=${{ secrets.MYSQL_PORT }} \
             -e MYSQL_DB=${{ secrets.MYSQL_DB }} \
