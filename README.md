@@ -59,15 +59,8 @@ TemuOverflow는 AI를 결합한 **한국형 스택 오버플로우**로, 개발�
 
 ### Front-end
 <div>
-![React (1)](https://github.com/user-attachments/assets/7ffd7976-12b2-4d9b-9901-26b119c5f376)
+![React (1)](https://github.com/user-attachments/assets/949b957f-5e3a-4c00-8b85-f56f55439a44)
 
-![React (1)](https://github.com/user-attachments/assets/dc604dd7-ce9c-4c49-91fe-33e805525b1a)
-
-react
-
-react
-
-reactreact
 </div>
 
 ### Back-end
