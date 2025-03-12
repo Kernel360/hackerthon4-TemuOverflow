@@ -23,7 +23,7 @@ public class PostDto {
     private LocalDateTime updatedAt;
     private int likeCount;
     private boolean isLikedByCurrentUser;
-//    private boolean isSolved;
+    private boolean isSolved;
 //    private String category;
 
 
@@ -39,7 +39,7 @@ public class PostDto {
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt() == null ? LocalDateTime.MIN : post.getUpdatedAt())
                 .likeCount(post.getLikeCount())
-//                .isSolved(post.getIsSolved() == null ? false : post.getIsSolved())
+                .isSolved(post.getIsSolved() == null ? false : post.getIsSolved())
 //                .category(post.getCategory() == null ? "null" : post.getCategory())
                 .build();
     }
