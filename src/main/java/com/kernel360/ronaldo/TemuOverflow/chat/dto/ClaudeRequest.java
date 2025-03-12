@@ -32,7 +32,7 @@ public class ClaudeRequest {
                 .model(model)
                 .max_tokens(maxTokens)
                 .messages(messagesList)
-                .temperature(0.7) // 기본 temperature 값 설정
+                .temperature(0.9) // 기본 temperature 값 설정
                 .system(prompt)
                 .build();
     }
