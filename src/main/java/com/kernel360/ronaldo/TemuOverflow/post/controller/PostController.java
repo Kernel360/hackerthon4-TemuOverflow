@@ -10,12 +10,17 @@ import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -71,20 +76,19 @@ public class PostController {
         return ResponseEntity.ok(PostDto.fromEntity(postService.getRandomPost(userId)));
     }
 
-    // 게시글 검색 (GET)
-    @GetMapping("/search")
-    public ResponseEntity<List<PostDto>> searchPosts(@RequestParam String keyword) {
-        List<PostDto> posts = postService.searchPosts(keyword).stream()
-                .map(PostDto::fromEntity)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(posts);
 
-    }
-
-    // 페이지네이션된 전체 게시글 조회 (GET)
+    // 게시판 검색 && 페이지네이션
     @GetMapping
-    public ResponseEntity<Page<PostDto>> getPagedPosts(Pageable pageable) {
-        Page<PostDto> posts = postService.getPagedPosts(pageable).map(PostDto::fromEntity);
-        return ResponseEntity.ok(posts);
+    public ResponseEntity<Page<PostDto>> getPosts(@RequestParam(required = false) String keyword, Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "id"));
+        Page<Post> posts;
+        if (keyword != null && !keyword.isEmpty()) {
+            posts = postService.searchPosts(keyword, pageRequest);
+        } else {
+            posts = postService.getPagedPosts(pageRequest);
+        }
+        Page<PostDto> postDtos = posts.map(PostDto::fromEntity);
+        return ResponseEntity.ok(postDtos);
     }
+
 }
