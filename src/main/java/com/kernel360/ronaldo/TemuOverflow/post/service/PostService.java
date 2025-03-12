@@ -11,6 +11,7 @@ import com.kernel360.ronaldo.TemuOverflow.reply.dto.ReplyDto;
 import com.kernel360.ronaldo.TemuOverflow.reply.entity.Reply;
 import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import com.kernel360.ronaldo.TemuOverflow.user.service.UserAuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
@@ -49,11 +50,19 @@ public class PostService {
     }
 
     // 게시글 상세 조회 -> id는 postId임
-    public PostDto getPostById(Long userId, Long id) {
+    public PostDto getPostById(HttpServletRequest request, Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
 
-        boolean isLikedByCurrentUser = post.getLikeArticles().stream()
-                .anyMatch(likeArticle -> likeArticle.getUserId().equals(userId));
+        boolean isLikedByCurrentUser;
+
+        if(userAuthService.isTokenExist(request)) {
+            Long userId = userAuthService.getUserIdFromToken(request);
+
+            isLikedByCurrentUser = post.getLikeArticles().stream()
+                    .anyMatch(likeArticle -> likeArticle.getUserId().equals(userId));
+        } else {
+            isLikedByCurrentUser = false;
+        }
 
         return PostDto.builder()
                 .id(post.getId())

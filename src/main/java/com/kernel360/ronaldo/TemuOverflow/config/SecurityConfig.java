@@ -12,6 +12,7 @@ import com.kernel360.ronaldo.TemuOverflow.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -55,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers( "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers( "/api/reply/ai/**").permitAll()
                         .requestMatchers("/api/chat/**").permitAll() // 채팅 API 접근 허용
+                        .requestMatchers(HttpMethod.GET, "/api/reply/post/**", "/api/article/**", "/api/article", "api/article/search").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

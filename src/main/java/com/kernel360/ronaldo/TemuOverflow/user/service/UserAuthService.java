@@ -75,4 +75,8 @@ public class UserAuthService {
         String accessToken = request.getHeader("Authorization").substring(7);
         return jwtTokenProvider.extractUserId(accessToken).orElseThrow(() -> new RuntimeException("User Id not found in token"));
     }
+
+    public Boolean isTokenExist(HttpServletRequest request) {
+        return request.getHeader("Authorization") != null;
+    }
 }

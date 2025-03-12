@@ -51,8 +51,8 @@ public class PostController {
     // 게시글 상세 조회 (GET)
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(HttpServletRequest request, @PathVariable Long id) {
-        Long userId = userAuthService.getUserIdFromToken(request);
-        PostDto postDto = postService.getPostById(userId, id);
+        //Long userId = userAuthService.getUserIdFromToken(request);
+        PostDto postDto = postService.getPostById(request, id);
         return ResponseEntity.ok(postDto);
     }
 
