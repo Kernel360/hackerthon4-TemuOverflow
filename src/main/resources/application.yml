@@ -50,7 +50,8 @@ claude:
   api:
     url : https://api.anthropic.com/v1/messages
     key: ${CLAUDE_KEY}
-    model: claude-3-opus-20240229
+    # model: claude-3-opus-20240229
+    model: claude-3-haiku-20240307
     max-tokens: 1000
 
 jwt:
