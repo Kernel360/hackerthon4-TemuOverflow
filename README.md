@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- logo -->
-<img src="src/resources/logo.png" width="200"/>
+![테무플로우로고](https://github.com/user-attachments/assets/be4070b6-7d7d-411d-b754-da60ccb637e9)
 
 ### TemuOverflow✅
 
@@ -9,6 +9,10 @@
 <br/> [<img src="https://img.shields.io/badge/프로젝트 기간-2025.03.10~2025.03.12-green?style=flat&logo=&logoColor=white" />]()
 
 </div>
+
+## 🎬 시연 영상
+![테무플로우시연초압축버전](https://github.com/user-attachments/assets/a9b0182f-8cc8-4ad0-984e-768e7a120b56)
+
 
 ## 📝 프로젝트 소개
 TemuOverflow는 AI를 결합한 **한국형 스택 오버플로우**로, 개발자들이 코드 에러를 공유하고 해결할 수 있도록 돕는 웹 서비스입니다.
