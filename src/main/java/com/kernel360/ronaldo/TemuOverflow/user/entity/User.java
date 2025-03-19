@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "users")  // "user" 대신 "users" 사용
 public class User {
 
     @Id
