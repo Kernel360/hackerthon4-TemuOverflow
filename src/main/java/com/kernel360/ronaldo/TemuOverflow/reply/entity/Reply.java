@@ -24,18 +24,11 @@ public class Reply {
     private Long id;
 
     @Column(name = "post_id", nullable = false)
- //   @ManyToOne(fetch = LAZY)
+    //   @ManyToOne(fetch = LAZY)
     private Long postId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    @JoinTable(name = "users",
-//            joinColumns = @JoinColumn(name = "reply_id"),
-//            inverseJoinColumns = @JoinColumn(name = "id"))
-//    private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "created_at", updatable = false)
