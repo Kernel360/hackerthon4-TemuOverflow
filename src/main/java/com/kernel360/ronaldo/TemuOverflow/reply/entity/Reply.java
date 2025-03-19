@@ -28,7 +28,7 @@ public class Reply {
     private Long postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "created_at", updatable = false)
