@@ -28,7 +28,10 @@ public class Reply {
     private Long postId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
+    @JoinTable(name = "users",
+            joinColumns = @JoinColumn(name = "reply_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
     private User user;
 
     @Column(name = "created_at", updatable = false)
